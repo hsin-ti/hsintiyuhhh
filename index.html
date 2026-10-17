@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿拉伯語禮儀短句助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6ef; --card:#ffffff; --ink:#2b2a26; --muted:#7a7367;
+    --accent:#1f6f54; --accent-soft:#e7f1ec; --gold:#b8912f; --line:#e8e1d4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.7;
+  }
+  header{
+    position:sticky; top:0; z-index:10; background:rgba(250,246,239,.94);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  .bar{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{font-weight:700;font-size:1.05rem;color:var(--accent)}
+  .brand span{color:var(--muted);font-weight:400;font-size:.85rem;margin-left:6px}
+  nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  nav button{
+    border:1px solid transparent;background:transparent;color:var(--ink);
+    padding:7px 13px;border-radius:999px;cursor:pointer;font-size:.9rem;font-family:inherit;
+  }
+  nav button:hover{background:var(--accent-soft)}
+  nav button.active{background:var(--accent);color:#fff}
+  main{max-width:980px;margin:0 auto;padding:28px 18px 80px}
+  h1{font-size:1.7rem;margin-bottom:8px;letter-spacing:.02em}
+  h2{font-size:1.25rem;margin:26px 0 12px}
+  .lead{color:var(--muted);margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .scene-card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;
+    cursor:pointer;transition:.18s;text-align:left;font-family:inherit;
+  }
+  .scene-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 20px rgba(31,111,84,.10)}
+  .scene-icon{font-size:1.6rem}
+  .scene-name{font-weight:700;margin-top:6px}
+  .scene-ar{font-family:'Noto Naskh Arabic',serif;direction:rtl;color:var(--muted);font-size:1.05rem}
+  .filters{display:flex;gap:18px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:18px}
+  .fgroup{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .fgroup label{font-size:.82rem;color:var(--muted);margin-right:2px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:.84rem;cursor:pointer;font-family:inherit}
+  .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .count{font-size:.85rem;color:var(--muted);margin-bottom:14px}
+  .phrase{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+  .phrase .ar{direction:rtl;text-align:right;font-family:'Noto Naskh Arabic',serif;font-size:1.75rem;line-height:2;margin-bottom:2px}
+  .phrase .tr{color:var(--gold);font-size:.92rem;font-style:italic;margin-bottom:6px}
+  .phrase .zh{font-size:1.05rem;font-weight:600;margin-bottom:10px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .tag{font-size:.75rem;background:var(--accent-soft);color:var(--accent);padding:3px 10px;border-radius:999px}
+  .tag.gray{background:#f1ede4;color:var(--muted)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 13px;font-size:.86rem;cursor:pointer;font-family:inherit}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.saved{background:var(--accent);color:#fff;border-color:var(--accent)}
+  details{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+  summary{cursor:pointer;font-size:.86rem;color:var(--accent);list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸ ";transition:.2s;display:inline-block}
+  details[open] summary::before{transform:rotate(90deg)}
+  .detail-body{font-size:.9rem;color:#4a463f;margin-top:8px;display:grid;gap:6px}
+  .detail-body b{color:var(--accent)}
+  .example-ar{direction:rtl;text-align:right;font-family:'Noto Naskh Arabic',serif;font-size:1.15rem;line-height:1.9;color:var(--ink)}
+  .example-zh{color:var(--muted);font-size:.88rem}
+  .gender-note{font-size:.78rem;color:var(--gold);margin-top:2px}
+  .empty{text-align:center;color:var(--muted);padding:40px 0}
+  .back{margin-bottom:16px}
+  .quiz-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .quiz-progress{font-size:.85rem;color:var(--muted);margin-bottom:10px}
+  .quiz-q{font-size:1.15rem;font-weight:600;margin-bottom:16px;line-height:1.8}
+  .quiz-q .ar{direction:rtl;font-family:'Noto Naskh Arabic',serif;font-size:1.6rem}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:9px;cursor:pointer;font-size:.96rem;font-family:inherit;transition:.15s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.correct{background:#e7f5ec;border-color:#2e8b57;color:#1c5e3a}
+  .opt.wrong{background:#fdeaea;border-color:#c94b4b;color:#8f2b2b}
+  .opt .ar{direction:rtl;font-family:'Noto Naskh Arabic',serif;font-size:1.25rem}
+  .quiz-result{text-align:center;padding:20px 0}
+  .quiz-result .score{font-size:2.6rem;font-weight:700;color:var(--accent)}
+  .about-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px}
+  .about-card h3{font-size:1.05rem;margin-bottom:8px;color:var(--accent)}
+  .about-card ul{margin-left:20px;color:#4a463f;font-size:.93rem}
+  .about-card p{font-size:.93rem;color:#4a463f}
+  .disclaimer{background:#fff8e6;border:1px solid #f0e0b0;border-radius:12px;padding:14px 16px;font-size:.86rem;color:#7a6320;margin-top:16px}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:30px 18px}
+  @media(max-width:560px){
+    h1{font-size:1.4rem}
+    .phrase .ar{font-size:1.5rem}
+    .bar{padding:10px 14px}
+    nav button{padding:6px 10px;font-size:.84rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">阿拉伯語禮儀短句助手 <span>عبارات التأدب</span></div>
+    <nav>
+      <button data-nav="home">首頁</button>
+      <button data-nav="quiz">小測驗</button>
+      <button data-nav="fav">我的收藏</button>
+      <button data-nav="about">關於</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+<footer>本網站內容僅供學習參考・不收集個人資料・不使用 AI API</footer>
+
+<script>
+/* ============================================================
+   1. 情境與語料
+   ============================================================ */
+const SCENES = [
+  {key:'greeting', name:'問候',          ar:'التَّحِيَّات',              icon:'👋'},
+  {key:'intro',    name:'自我介紹',      ar:'التَّعْرِيف',               icon:'🙋'},
+  {key:'praise',   name:'稱讚',          ar:'المَدْح',                   icon:'✨'},
+  {key:'thanks',   name:'感謝',          ar:'الشُّكْر',                  icon:'🙏'},
+  {key:'apology',  name:'道歉',          ar:'الاعْتِذَار',               icon:'😔'},
+  {key:'dining',   name:'用餐',          ar:'الطَّعَام',                 icon:'🍽️'},
+  {key:'host',     name:'作客',          ar:'الضِّيَافَة',               icon:'🏠'},
+  {key:'farewell', name:'告別',          ar:'الوَدَاع',                  icon:'🕊️'},
+  {key:'blessing', name:'祝福與日常用語', ar:'التَّعَابِيرُ الاجْتِمَاعِيَّة', icon:'🤲'}
+];
+
+const PHRASES = [
+  /* ---------- 問候 ---------- */
+  {id:'gr1',scene:'greeting',ar:'السَّلامُ عَلَيْكُم',tr:'as-salāmu ʿalaykum',zh:'願你平安',
+   usage:'最通用的問候語，幾乎所有場合都適用。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'對方通常回覆：وَعَلَيْكُم السَّلام（wa ʿalaykumu s-salām）。',taboo:''},
+  {id:'gr2',scene:'greeting',ar:'أَهْلاً وَسَهْلاً',tr:'ahlan wa sahlan',zh:'歡迎、你好',
+   usage:'見面時的親切問候，比正式問候更日常。',register:'casual',audience:['all'],gender:'neutral',
+   tip:'字面意思是「你到了家人之中，走的是平坦之路」。',taboo:''},
+  {id:'gr3',scene:'greeting',ar:'صَبَاح الخَيْر',tr:'ṣabāḥ al-khayr',zh:'早安',
+   usage:'上午見面時使用。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'對方回覆：صَبَاح النُّور（ṣabāḥ an-nūr）。',taboo:''},
+  {id:'gr4',scene:'greeting',ar:'كَيْفَ حَالُكَ؟',tr:'kayfa ḥāluk?',zh:'你好嗎？',
+   usage:'關心對方近況，適合見面寒暄。',register:'both',audience:['all'],gender:'variable',
+   arM:'كَيْفَ حَالُكَ؟',arF:'كَيْفَ حَالُكِ؟',trM:'kayfa ḥāluk?',trF:'kayfa ḥāluki?',
+   tip:'對女性用 ḥāluki；正式場合可加 إِنْ شَاءَ الله。',taboo:''},
+  {id:'gr5',scene:'greeting',ar:'مَرْحَبًا',tr:'marḥaban',zh:'你好',
+   usage:'輕鬆場合的簡短問候，年輕人之間常用。',register:'casual',audience:['peer','younger'],gender:'neutral',
+   tip:'也可連說 مَرْحَبًا مَرْحَبًا 表示熱情。',taboo:'對長輩建議改用正式問候。'},
+
+  /* ---------- 自我介紹 ---------- */
+  {id:'in1',scene:'intro',ar:'اسْمِي ...',tr:'ismī ...',zh:'我叫……',
+   usage:'自我介紹的開頭，後面接自己的名字。',register:'both',audience:['all'],gender:'neutral',
+   tip:'名字前後可加 تشرفنا 表示幸會。',taboo:''},
+  {id:'in2',scene:'intro',ar:'تَشَرَّفْنَا',tr:'tasharrafnā',zh:'幸會',
+   usage:'初次見面時表達榮幸。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'對方常回覆：الشَّرَفُ لِي（榮幸的是我）。',taboo:''},
+  {id:'in3',scene:'intro',ar:'أَنَا مِنْ تَايْوَان',tr:'anā min Tāywān',zh:'我來自台灣',
+   usage:'說明自己的來源。',register:'both',audience:['all'],gender:'neutral',
+   tip:'也可說 أَنَا تَايْوَانِيّ（男）／تَايْوَانِيَّة（女）。',taboo:''},
+  {id:'in4',scene:'intro',ar:'مَا اسْمُكَ؟',tr:'mā ismuk?',zh:'你叫什麼名字？',
+   usage:'詢問對方姓名。',register:'both',audience:['all'],gender:'variable',
+   arM:'مَا اسْمُكَ؟',arF:'مَا اسْمُكِ؟',trM:'mā ismuk?',trF:'mā ismuki?',
+   tip:'對女性用 ismuki。',taboo:''},
+  {id:'in5',scene:'intro',ar:'أَنَا طَالِب',tr:'anā ṭālib',zh:'我是學生',
+   usage:'說明身分。',register:'both',audience:['all'],gender:'variable',
+   arM:'أَنَا طَالِب',arF:'أَنَا طَالِبَة',trM:'anā ṭālib',trF:'anā ṭāliba',
+   tip:'女性用 طَالِبَة（ṭāliba）。',taboo:''},
+
+  /* ---------- 稱讚 ---------- */
+  {id:'pr1',scene:'praise',ar:'مَا شَاءَ الله',tr:'mā shāʾa llāh',zh:'真好、太棒了',
+   usage:'表達讚賞，帶有祝福意味。',register:'both',audience:['all'],gender:'neutral',
+   tip:'常用來避免「邪眼」，是阿拉伯世界非常常見的讚美。',taboo:'不宜用來評論負面或不吉利的事。'},
+  {id:'pr2',scene:'praise',ar:'أَحْسَنْتَ!',tr:'aḥsant!',zh:'做得好！',
+   usage:'稱讚對方的表現或成果。',register:'both',audience:['peer','younger'],gender:'variable',
+   arM:'أَحْسَنْتَ!',arF:'أَحْسَنْتِ!',trM:'aḥsant!',trF:'aḥsanti!',
+   tip:'對女性用 aḥsanti。',taboo:''},
+  {id:'pr3',scene:'praise',ar:'هَذَا جَمِيلٌ جِدًّا',tr:'hādhā jamīl jiddan',zh:'這非常美',
+   usage:'稱讚物品、設計或景色。',register:'both',audience:['all'],gender:'neutral',
+   tip:'也可簡化為 جَمِيل（jamīl）。',taboo:''},
+  {id:'pr4',scene:'praise',ar:'بَارَكَ اللهُ فِيكَ',tr:'bāraka llāhu fīk',zh:'願真主賜福你',
+   usage:'帶宗教色彩的感謝式稱讚，用於表達欣賞。',register:'formal',audience:['all'],gender:'variable',
+   arM:'بَارَكَ اللهُ فِيكَ',arF:'بَارَكَ اللهُ فِيكِ',trM:'bāraka llāhu fīk',trF:'bāraka llāhu fīki',
+   tip:'對女性用 fīki。',taboo:''},
+  {id:'pr5',scene:'praise',ar:'مُمْتَاز',tr:'mumtāz',zh:'優秀',
+   usage:'簡短的稱讚，適合各種場合。',register:'both',audience:['all'],gender:'neutral',
+   tip:'口語中也常說 عَظِيم（ʿaẓīm，太棒了）。',taboo:''},
+
+  /* ---------- 感謝 ---------- */
+  {id:'th1',scene:'thanks',ar:'شُكْرًا',tr:'shukran',zh:'謝謝',
+   usage:'最通用的感謝語。',register:'both',audience:['all'],gender:'neutral',
+   tip:'對方常回覆：عَفْوًا（ʿafwan，不客氣）。',taboo:''},
+  {id:'th2',scene:'thanks',ar:'شُكْرًا جَزِيلاً',tr:'shukran jazīlan',zh:'非常感謝',
+   usage:'正式或表達較強謝意時使用。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'也可說 أَشْكُرُكَ جَزِيلَ الشُّكْر。',taboo:''},
+  {id:'th3',scene:'thanks',ar:'جَزَاكَ اللهُ خَيْرًا',tr:'jazāka llāhu khayran',zh:'願真主賜你善',
+   usage:'帶宗教色彩的感謝，常見於正式或傳統場合。',register:'formal',audience:['all'],gender:'variable',
+   arM:'جَزَاكَ اللهُ خَيْرًا',arF:'جَزَاكِ اللهُ خَيْرًا',trM:'jazāka llāhu khayran',trF:'jazāki llāhu khayran',
+   tip:'對女性用 jazāki。',taboo:''},
+  {id:'th4',scene:'thanks',ar:'أَشْكُرُكَ',tr:'ashkuruk',zh:'我感謝你',
+   usage:'直接表達感謝，適合正式或書面。',register:'formal',audience:['all'],gender:'variable',
+   arM:'أَشْكُرُكَ',arF:'أَشْكُرُكِ',trM:'ashkuruk',trF:'ashkuruki',
+   tip:'對女性用 ashkuruki。',taboo:''},
+  {id:'th5',scene:'thanks',ar:'لا شُكْرَ عَلَى وَاجِب',tr:'lā shukra ʿalā wājib',zh:'不客氣（回應感謝）',
+   usage:'當別人向你道謝時的回應。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'字面意思是「職責所在，不必言謝」。',taboo:''},
+
+  /* ---------- 道歉 ---------- */
+  {id:'ap1',scene:'apology',ar:'آسِف',tr:'āsif',zh:'對不起',
+   usage:'最常用的道歉語。',register:'both',audience:['all'],gender:'variable',
+   arM:'آسِف',arF:'آسِفَة',trM:'āsif',trF:'āsifa',
+   tip:'女性用 āsifa。',taboo:''},
+  {id:'ap2',scene:'apology',ar:'عَفْوًا',tr:'ʿafwan',zh:'不好意思、抱歉',
+   usage:'輕微打擾或道歉時使用。',register:'both',audience:['all'],gender:'neutral',
+   tip:'這個詞也可用來回應感謝，意思是「不客氣」，要看語境。',taboo:''},
+  {id:'ap3',scene:'apology',ar:'أَعْتَذِر',tr:'aʿtadhir',zh:'我道歉',
+   usage:'較正式的道歉。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'可加 عَنْ ذَلِكَ（aʿtadhir ʿan dhālik，為那件事道歉）。',taboo:''},
+  {id:'ap4',scene:'apology',ar:'لَمْ أَقْصِد',tr:'lam aqṣid',zh:'我不是故意的',
+   usage:'解釋無心之過。',register:'both',audience:['all'],gender:'neutral',
+   tip:'女性說法相同，動詞已隨說話者變化。',taboo:''},
+  {id:'ap5',scene:'apology',ar:'سَامِحْنِي',tr:'sāmiḥnī',zh:'原諒我',
+   usage:'較誠懇的道歉，請求原諒。',register:'both',audience:['all'],gender:'variable',
+   arM:'سَامِحْنِي',arF:'سَامِحِينِي',trM:'sāmiḥnī',trF:'sāmiḥīnī',
+   tip:'對女性用 sāmiḥīnī。',taboo:''},
+
+  /* ---------- 用餐 ---------- */
+  {id:'di1',scene:'dining',ar:'بِسْمِ الله',tr:'bismi llāh',zh:'以真主之名（開飯前）',
+   usage:'用餐前常說的短語。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'穆斯林家庭用餐前的習慣用語。',taboo:'非宗教場合可省略。'},
+  {id:'di2',scene:'dining',ar:'الحَمْدُ لِله',tr:'al-ḥamdu li-llāh',zh:'讚美真主（飯後）',
+   usage:'用餐完畢後的感謝語。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'也常用來回答「你好嗎？」，表示一切安好。',taboo:''},
+  {id:'di3',scene:'dining',ar:'تَفَضَّل',tr:'tafaḍḍal',zh:'請用',
+   usage:'請對方取用食物或接受東西。',register:'both',audience:['all'],gender:'variable',
+   arM:'تَفَضَّل',arF:'تَفَضَّلِي',trM:'tafaḍḍal',trF:'tafaḍḍalī',
+   tip:'對女性用 tafaḍḍalī。',taboo:''},
+  {id:'di4',scene:'dining',ar:'شَهِيَّة طَيِّبَة',tr:'shahiyya ṭayyiba',zh:'好胃口',
+   usage:'用餐開始時對同桌的人說。',register:'both',audience:['all'],gender:'neutral',
+   tip:'對方常回覆：الله يخليك（allāhu yikhallīk）。',taboo:''},
+  {id:'di5',scene:'dining',ar:'أَنَا شَبْعَان',tr:'anā shabʿān',zh:'我吃飽了',
+   usage:'婉拒再添食物時使用。',register:'casual',audience:['all'],gender:'variable',
+   arM:'أَنَا شَبْعَان',arF:'أَنَا شَبْعَانَة',trM:'anā shabʿān',trF:'anā shabʿāna',
+   tip:'女性用 shabʿāna；禮貌起見可加 شُكْرًا。',taboo:'直接說「不要」可能顯得生硬。'},
+
+  /* ---------- 作客 ---------- */
+  {id:'ho1',scene:'host',ar:'تَفَضَّلْ بِالدُّخُول',tr:'tafaḍḍal bi-d-dukhūl',zh:'請進',
+   usage:'邀請客人進門。',register:'formal',audience:['all'],gender:'variable',
+   arM:'تَفَضَّلْ بِالدُّخُول',arF:'تَفَضَّلِي بِالدُّخُول',trM:'tafaḍḍal bi-d-dukhūl',trF:'tafaḍḍalī bi-d-dukhūl',
+   tip:'對女性用 tafaḍḍalī。',taboo:''},
+  {id:'ho2',scene:'host',ar:'البَيْتُ بَيْتُكَ',tr:'al-bayt baytuk',zh:'別客氣，當自己家',
+   usage:'讓客人感到自在。',register:'both',audience:['all'],gender:'variable',
+   arM:'البَيْتُ بَيْتُكَ',arF:'البَيْتُ بَيْتُكِ',trM:'al-bayt baytuk',trF:'al-bayt baytuki',
+   tip:'對女性用 baytuki。',taboo:''},
+  {id:'ho3',scene:'host',ar:'شُكْرًا عَلَى حُسْنِ الضِّيَافَة',tr:'shukran ʿalā ḥusn aḍ-ḍiyāfa',zh:'謝謝招待',
+   usage:'離開時感謝主人的款待。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'也可說 مَا قَصَّرْتَ（你做得很好）。',taboo:''},
+  {id:'ho4',scene:'host',ar:'اللهُ يِخَلِّيك',tr:'allāhu yikhallīk',zh:'感謝你、保重',
+   usage:'口語中表達感謝或祝福。',register:'casual',audience:['all'],gender:'variable',
+   arM:'اللهُ يِخَلِّيك',arF:'اللهُ يِخَلِّيكِي',trM:'allāhu yikhallīk',trF:'allāhu yikhallīki',
+   tip:'對女性用 yikhallīki；是方言色彩較重的說法。',taboo:''},
+  {id:'ho5',scene:'host',ar:'هَلْ تُرِيدُ شَيْئًا؟',tr:'hal turīd shayʾan?',zh:'你需要什麼嗎？',
+   usage:'主動詢問客人需求。',register:'both',audience:['all'],gender:'variable',
+   arM:'هَلْ تُرِيدُ شَيْئًا؟',arF:'هَلْ تُرِيدِينَ شَيْئًا؟',trM:'hal turīd shayʾan?',trF:'hal turīdīna shayʾan?',
+   tip:'對女性用 turīdīna。',taboo:''},
+
+  /* ---------- 告別 ---------- */
+  {id:'fa1',scene:'farewell',ar:'مَعَ السَّلامَة',tr:'maʿa s-salāma',zh:'再見',
+   usage:'離開時最常用的道別語。',register:'both',audience:['all'],gender:'neutral',
+   tip:'字面意思是「與平安同行」。',taboo:''},
+  {id:'fa2',scene:'farewell',ar:'إِلَى اللِّقَاء',tr:'ilā l-liqāʾ',zh:'再會',
+   usage:'較正式的道別。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'適用於商務或正式場合。',taboo:''},
+  {id:'fa3',scene:'farewell',ar:'وَدَاعًا',tr:'wadāʿan',zh:'告別',
+   usage:'較長期或正式的分別。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'短暫離開較少用，日常多用 مَعَ السَّلامَة。',taboo:'日常短暫分別用此詞可能顯得生疏。'},
+  {id:'fa4',scene:'farewell',ar:'فِي أَمَانِ الله',tr:'fī amān Allāh',zh:'願真主護佑你',
+   usage:'帶祝福的道別。',register:'formal',audience:['all'],gender:'neutral',
+   tip:'常用於送別遠行的人。',taboo:''},
+  {id:'fa5',scene:'farewell',ar:'تُصْبِحُ عَلَى خَيْر',tr:'tuṣbiḥ ʿalā khayr',zh:'晚安',
+   usage:'晚上道別或睡前使用。',register:'both',audience:['all'],gender:'variable',
+   arM:'تُصْبِحُ عَلَى خَيْر',arF:'تُصْبِحِينَ عَلَى خَيْر',trM:'tuṣbiḥ ʿalā khayr',trF:'tuṣbiḥīna ʿalā khayr',
+   tip:'對方回覆：وَأَنْتَ مِنْ أَهْلِهِ（wa anta min ahlih）。',taboo:''},
+
+  /* ---------- 祝福與日常用語 ---------- */
+  {id:'bl1',scene:'blessing',ar:'بِالتَّوْفِيق',tr:'bi-t-tawfīq',zh:'祝你成功、祝你順利',
+   usage:'祝福對方順利，考試、面試、開始新事物時常用。',register:'both',audience:['all'],gender:'neutral',
+   tip:'可加 إِنْ شَاءَ الله：بِالتَّوْفِيق إِنْ شَاءَ الله。',
+   example:{ar:'بِالتَّوْفِيق فِي الامْتِحَان.',zh:'祝你考試順利。'},taboo:''},
+
+  {id:'bl2',scene:'blessing',ar:'إِنْ شَاءَ الله',tr:'in shāʾa llāh',zh:'如果真主意欲',
+   usage:'談論未來將要做的事時使用，表達謙卑與對真主意志的尊重。',register:'both',audience:['all'],gender:'neutral',
+   tip:'幾乎所有涉及未來的陳述都可加，是阿拉伯世界最常見的禮儀用語之一。',
+   example:{ar:'سَأُرْسِلُ لَكَ المَلَفّ إِنْ شَاءَ الله.',zh:'我之後會把檔案傳給你，真主意欲。'},
+   taboo:'不宜用來回應已發生的事實。'},
+
+  {id:'bl3',scene:'blessing',ar:'الحَمْدُ لِله',tr:'al-ḥamdu li-llāh',zh:'感謝真主',
+   usage:'回應近況、表達感恩，或表示一切安好。',register:'both',audience:['all'],gender:'neutral',
+   tip:'常作為「你好嗎？」的標準回應開頭。',
+   example:{ar:'كَيْفَ حَالُكَ؟ الحَمْدُ لِله، بِخَيْر.',zh:'你好嗎？感謝真主，我很好。'},taboo:''},
+
+  {id:'bl4',scene:'blessing',ar:'مَا شَاءَ الله',tr:'mā shāʾa llāh',zh:'真主所意欲的啊（真棒）',
+   usage:'稱讚人或事物時使用，帶有祝福與避免邪眼的意味。',register:'both',audience:['all'],gender:'neutral',
+   tip:'看到美好事物時常脫口而出。',
+   example:{ar:'مَا شَاءَ الله، لُغَتُكَ العَرَبِيَّة جَمِيلَة.',zh:'真棒，你的阿拉伯語很好。'},
+   taboo:'不宜用來評論負面或不吉利的事。'},
+
+  {id:'bl5',scene:'blessing',ar:'بَارَكَ اللهُ فِيكَ',tr:'bāraka llāhu fīk',zh:'願真主賜福於你',
+   usage:'感謝或祝福對方時使用。',register:'formal',audience:['all'],gender:'variable',
+   arM:'بَارَكَ اللهُ فِيكَ',arF:'بَارَكَ اللهُ فِيكِ',trM:'bāraka llāhu fīk',trF:'bāraka llāhu fīki',
+   tip:'對女性用 fīki。',
+   example:{ar:'شُكْرًا لَكَ. بَارَكَ اللهُ فِيكَ.',zh:'謝謝你。願真主賜福你。'},taboo:''},
+
+  {id:'bl6',scene:'blessing',ar:'جَزَاكَ اللهُ خَيْرًا',tr:'jazāka llāhu khayran',zh:'願真主以善報答你',
+   usage:'比單純的「謝謝」更正式、更有宗教色彩的感謝。',register:'formal',audience:['all'],gender:'variable',
+   arM:'جَزَاكَ اللهُ خَيْرًا',arF:'جَزَاكِ اللهُ خَيْرًا',trM:'jazāka llāhu khayran',trF:'jazāki llāhu khayran',
+   tip:'對女性用 jazāki。',
+   example:{ar:'جَزَاكَ اللهُ خَيْرًا عَلَى مُسَاعَدَتِكَ.',zh:'謝謝你的幫助，願真主回報你善行。'},taboo:''},
+
+  {id:'bl7',scene:'blessing',ar:'اللهُ يِعْطِيكَ العَافِيَة',tr:'allāhu yiʿṭīk al-ʿāfiya',zh:'願真主賜給你健康',
+   usage:'感謝別人的辛勞時很常用。',register:'casual',audience:['all'],gender:'variable',
+   arM:'اللهُ يِعْطِيكَ العَافِيَة',arF:'اللهُ يِعْطِيكِي العَافِيَة',trM:'allāhu yiʿṭīk al-ʿāfiya',trF:'allāhu yiʿṭīki al-ʿāfiya',
+   tip:'對女性用 yiʿṭīki；是方言色彩較重的說法。',
+   example:{ar:'اللهُ يِعْطِيكَ العَافِيَة عَلَى هَذَا العَمَل.',zh:'辛苦了，願真主賜你健康。'},taboo:''},
+
+  {id:'bl8',scene:'blessing',ar:'وَفَّقَكَ الله',tr:'waffaqaka llāh',zh:'願真主使你成功',
+   usage:'祝福對方的學業、事業或重要計畫。',register:'formal',audience:['all'],gender:'variable',
+   arM:'وَفَّقَكَ الله',arF:'وَفَّقَكِ الله',trM:'waffaqaka llāh',trF:'waffaqaki llāh',
+   tip:'對女性用 waffaqaki。',
+   example:{ar:'وَفَّقَكَ الله فِي دِرَاسَتِكَ.',zh:'願真主保佑你的學業順利。'},taboo:''},
+
+  {id:'bl9',scene:'blessing',ar:'بِإِذْنِ الله',tr:'bi-idhni llāh',zh:'若真主允許',
+   usage:'與 إِنْ شَاءَ الله 接近，但語氣常帶有較強的信心。',register:'both',audience:['all'],gender:'neutral',
+   tip:'常用於約定未來的事。',
+   example:{ar:'سَنَلْتَقِي غَدًا بِإِذْنِ الله.',zh:'如果真主允許，我們明天見。'},taboo:''},
+
+  {id:'bl10',scene:'blessing',ar:'بِالتَّأْكِيد، إِنْ شَاءَ الله',tr:'bi-t-taʾkīd, in shāʾa llāh',zh:'當然，真主保佑',
+   usage:'回覆請求時很自然且有禮貌的說法。',register:'both',audience:['all'],gender:'neutral',
+   tip:'比單純說「當然」更謙卑、更有禮。',
+   example:{ar:'هَلْ تَسْتَطِيعُ الحُضُور؟ بِالتَّأْكِيد، إِنْ شَاءَ الله.',zh:'你能來嗎？當然，可以的，真主保佑。'},taboo:''},
+
+  {id:'bl11',scene:'blessing',ar:'بِالتَّوْفِيق إِنْ شَاءَ الله',tr:'bi-t-tawfīq in shāʾa llāh',zh:'祝你成功，真主意欲',
+   usage:'祝福的加強版，常用於考試、面試、遠行。',register:'both',audience:['all'],gender:'neutral',
+   tip:'語氣比單說 بِالتَّوْفِيق 更完整、更有祝福感。',
+   example:{ar:'بِالتَّوْفِيق إِنْ شَاءَ الله فِي الامْتِحَان.',zh:'祝你考試順利，真主意欲。'},taboo:''}
+];
+
+/* ============================================================
+   2. 狀態與工具
+   ============================================================ */
+const state = {
+  view: 'home',
+  scene: null,
+  filters: {audience:'all', gender:'male', register:'all'},
+  favorites: JSON.parse(localStorage.getItem('ar_greeting_fav') || '[]'),
+  quiz: null
+};
+
+const app = document.getElementById('app');
+const byId = id => PHRASES.find(p => p.id === id);
+
+function saveFav(){
+  localStorage.setItem('ar_greeting_fav', JSON.stringify(state.favorites));
+}
+function isFav(id){ return state.favorites.includes(id); }
+function toggleFav(id){
+  const i = state.favorites.indexOf(id);
+  if(i > -1) state.favorites.splice(i,1);
+  else state.favorites.push(id);
+  saveFav();
+  render();
+}
+function shuffle(a){
+  const arr = [...a];
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function speak(text){
+  if(!('speechSynthesis' in window)){
+    alert('此瀏覽器不支援語音播放。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ar-SA';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+function displayForm(p){
+  if(p.gender === 'variable'){
+    if(state.filters.gender === 'female'){
+      return {ar: p.arF || p.ar, tr: p.trF || p.tr, note: '女性形式'};
+    }
+    return {ar: p.arM || p.ar, tr: p.trM || p.tr, note: '男性形式'};
+  }
+  return {ar: p.ar, tr: p.tr, note: ''};
+}
+function matchAudience(p, aud){
+  return aud === 'all' || p.audience.includes('all') || p.audience.includes(aud);
+}
+function matchRegister(p, reg){
+  return reg === 'all' || p.register === reg || p.register === 'both';
+}
+function filterPhrases(sceneKey){
+  return PHRASES.filter(p =>
+    p.scene === sceneKey &&
+    matchAudience(p, state.filters.audience) &&
+    matchRegister(p, state.filters.register)
+  );
+}
+
+/* ============================================================
+   3. 渲染
+   ============================================================ */
+function render(){
+  document.querySelectorAll('nav button').forEach(b => {
+    b.classList.toggle('active',
+      b.dataset.nav === state.view ||
+      (state.view === 'scene' && b.dataset.nav === 'home')
+    );
+  });
+  if(state.view === 'home') return renderHome();
+  if(state.view === 'scene') return renderScene();
+  if(state.view === 'quiz') return renderQuiz();
+  if(state.view === 'fav') return renderFav();
+  if(state.view === 'about') return renderAbout();
+}
+
+function renderHome(){
+  app.innerHTML = `
+    <h1>阿拉伯語禮儀短句助手</h1>
+    <p class="lead">選擇情境 → 選擇對象與正式度 → 看短句、聽發音、讀文化提示。共 ${SCENES.length} 個情境、${PHRASES.length} 句實用短句。</p>
+    <div class="grid">
+      ${SCENES.map(s => `
+        <button class="scene-card" data-scene="${s.key}">
+          <div class="scene-icon">${s.icon}</div>
+          <div class="scene-name">${s.name}</div>
+          <div class="scene-ar">${s.ar}</div>
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderScene(){
+  const scene = SCENES.find(s => s.key === state.scene);
+  if(!scene) return renderHome();
+  const list = filterPhrases(state.scene);
+  const f = state.filters;
+
+  app.innerHTML = `
+    <button class="btn back" data-nav="home">← 返回情境</button>
+    <h1>${scene.icon} ${scene.name}</h1>
+    <p class="lead">調整下方條件，篩選適合的短句。</p>
+
+    <div class="filters">
+      <div class="fgroup">
+        <label>對象</label>
+        ${[['all','全部'],['elder','長輩'],['peer','同輩'],['younger','晚輩']].map(([v,t]) =>
+          `<button class="chip ${f.audience===v?'on':''}" data-filter="audience" data-value="${v}">${t}</button>`
+        ).join('')}
+      </div>
+      <div class="fgroup">
+        <label>性別</label>
+        ${[['male','對男性'],['female','對女性']].map(([v,t]) =>
+          `<button class="chip ${f.gender===v?'on':''}" data-filter="gender" data-value="${v}">${t}</button>`
+        ).join('')}
+      </div>
+      <div class="fgroup">
+        <label>正式度</label>
+        ${[['all','全部'],['formal','正式'],['casual','日常']].map(([v,t]) =>
+          `<button class="chip ${f.register===v?'on':''}" data-filter="register" data-value="${v}">${t}</button>`
+        ).join('')}
+      </div>
+    </div>
+
+    <div class="count">目前符合 <b>${list.length}</b> 句</div>
+
+    ${list.length === 0
+      ? `<div class="empty">此組合尚無短句，試試切換其他條件。</div>`
+      : list.map(p => phraseCard(p)).join('')}
+  `;
+}
+
+function phraseCard(p){
+  const form = displayForm(p);
+  const regText = p.register === 'formal' ? '正式' : (p.register === 'casual' ? '日常' : '正式／日常');
+  const audText = p.audience.includes('all') ? '通用對象' :
+    p.audience.map(a => ({elder:'長輩',peer:'同輩',younger:'晚輩'}[a])).join('、');
+  const fav = isFav(p.id);
+
+  return `
+    <div class="phrase">
+      <div class="ar">${form.ar}</div>
+      <div class="tr">${esc(form.tr)}</div>
+      ${form.note ? `<div class="gender-note">（${form.note}）</div>` : ''}
+      <div class="zh">${esc(p.zh)}</div>
+      <div class="tags">
+        <span class="tag">${regText}</span>
+        <span class="tag gray">${audText}</span>
+        ${p.gender === 'variable' ? '<span class="tag">有性別變體</span>' : ''}
+      </div>
+      <div class="actions">
+        <button class="btn" data-speak="${p.id}">🔊 播放</button>
+        <button class="btn ${fav?'saved':''}" data-fav="${p.id}">${fav?'★ 已收藏':'☆ 收藏'}</button>
+      </div>
+      <details>
+        <summary>使用時機與文化提示</summary>
+        <div class="detail-body">
+          <div><b>使用時機：</b>${esc(p.usage)}</div>
+          ${p.example ? `<div><b>例句：</b>
+            <div class="example-ar">${esc(p.example.ar)}</div>
+            <div class="example-zh">${esc(p.example.zh)}</div>
+          </div>` : ''}
+          ${p.tip ? `<div><b>文化提示：</b>${esc(p.tip)}</div>` : ''}
+          ${p.taboo ? `<div><b>注意：</b>${esc(p.taboo)}</div>` : ''}
+        </div>
+      </details>
+    </div>
+  `;
+}
+
+/* ---------- 測驗 ---------- */
+function startQuiz(){
+  const pool = shuffle(PHRASES).slice(0, 5);
+  const questions = pool.map((p, i) => {
+    const type = i % 2 === 0 ? 'zh2ar' : 'ar2zh';
+    const correct = type === 'zh2ar' ? p.ar : p.zh;
+    const others = shuffle(PHRASES.filter(x => x.id !== p.id)).slice(0, 3)
+      .map(x => type === 'zh2ar' ? x.ar : x.zh);
+    return {
+      type,
+      prompt: type === 'zh2ar' ? p.zh : p.ar,
+      options: shuffle([correct, ...others]),
+      answer: correct
+    };
+  });
+  state.quiz = {questions, idx:0, score:0, picked:null};
+  render();
+}
+
+function renderQuiz(){
+  if(!state.quiz){
+    app.innerHTML = `
+      <h1>小測驗</h1>
+      <p class="lead">5 題隨機出題，測試你對禮儀短句的記憶。</p>
+      <button class="btn" data-quiz-start>開始測驗</button>
+    `;
+    return;
+  }
+  const q = state.quiz;
+  if(q.idx >= q.questions.length){
+    app.innerHTML = `
+      <h1>測驗結果</h1>
+      <div class="quiz-box quiz-result">
+        <div class="score">${q.score} / ${q.questions.length}</div>
+        <p class="lead">${q.score === q.questions.length ? '全對，太厲害了！' : '再接再厲，多複習幾次就會記住。'}</p>
+        <button class="btn" data-quiz-start>再來一次</button>
+      </div>
+    `;
+    return;
+  }
+  const cur = q.questions[q.idx];
+  const answered = q.picked !== null;
+  app.innerHTML = `
+    <h1>小測驗</h1>
+    <div class="quiz-box">
+      <div class="quiz-progress">第 ${q.idx + 1} / ${q.questions.length} 題</div>
+      <div class="quiz-q">${cur.type === 'zh2ar' ? '下列哪一句阿拉伯語的意思是：' : '這句阿拉伯語是什麼意思？'}
+        <div class="${cur.type === 'zh2ar' ? '' : 'ar'}">${esc(cur.prompt)}</div>
+      </div>
+      ${cur.options.map(o => {
+        let cls = 'opt';
+        if(answered){
+          if(o === cur.answer) cls += ' correct';
+          else if(o === q.picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" data-opt="${esc(o)}" ${answered?'disabled':''}>
+          <span class="${cur.type === 'zh2ar' ? 'ar' : ''}">${esc(o)}</span>
+        </button>`;
+      }).join('')}
+      ${answered ? `<button class="btn" data-quiz-next>下一題 →</button>` : ''}
+    </div>
+  `;
+}
+
+/* ---------- 收藏 ---------- */
+function renderFav(){
+  const list = state.favorites.map(byId).filter(Boolean);
+  app.innerHTML = `
+    <h1>我的收藏</h1>
+    <p class="lead">收藏會保存在這台裝置的瀏覽器中，不會上傳。</p>
+    ${list.length === 0
+      ? `<div class="empty">還沒有收藏任何短句。<br>到情境頁點「☆ 收藏」就會出現在這裡。</div>`
+      : list.map(p => phraseCard(p)).join('')}
+  `;
+}
+
+/* ---------- 關於 ---------- */
+function renderAbout(){
+  app.innerHTML = `
+    <h1>關於本站</h1>
+    <div class="about-card">
+      <h3>專案目的</h3>
+      <p>這是一個阿拉伯語禮儀短句的學習輔助網頁，讓中文母語學習者依情境、對象與正式度，找到合適的阿拉伯語說法，並理解背後的文化提示。內容涵蓋日常問候、感謝、道歉、用餐、作客、告別，以及阿拉伯文化中極為常見的祝福與宗教性日常用語。</p>
+    </div>
+    <div class="about-card">
+      <h3>資料來源</h3>
+      <ul>
+        <li>阿拉伯語基礎教材與常用會話整理</li>
+        <li>Hans Wehr 阿拉伯語詞典（轉寫與詞義參考）</li>
+        <li>公開阿拉伯語學習網站與文化禮儀資料</li>
+        <li>宗教與社交禮儀短句（إن شاء الله、الحمد لله、ما شاء الله 等）整理自課堂講義與公開教材</li>
+      </ul>
+      <p style="margin-top:8px;color:#7a7367;font-size:.85rem">（提交前請把這幾項替換成你實際查閱的教材名稱。）</p>
+    </div>
+    <div class="about-card">
+      <h3>AI 使用說明</h3>
+      <ul>
+        <li>本網站程式碼由 AI 輔助撰寫初稿，再經人工測試、除錯與調整。</li>
+        <li>短句、轉寫與文化提示由 AI 生成初稿，經人工校對與篩選。</li>
+        <li>網站本身<strong>不呼叫任何 AI API</strong>，所有內容皆為靜態資料，不會傳送使用者資料。</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h3>隱私</h3>
+      <p>本站不收集姓名、Email 或任何個人資料。收藏功能僅使用瀏覽器 localStorage，資料留在你的裝置上。</p>
+    </div>
+    <div class="disclaimer">
+      ⚠️ 免責聲明：本網站內容僅供學習參考。實際使用時請依具體情境、地區文化與對象調整；阿拉伯語在不同國家與方言中可能有差異，宗教性用語的使用頻率與語感也因地區與家庭而異。
+    </div>
+  `;
+}
+
+/* ============================================================
+   4. 事件處理
+   ============================================================ */
+document.addEventListener('click', e => {
+  const navBtn = e.target.closest('[data-nav]');
+  if(navBtn){
+    state.view = navBtn.dataset.nav;
+    state.scene = null;
+    if(state.view === 'quiz') state.quiz = null;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  const sceneBtn = e.target.closest('[data-scene]');
+  if(sceneBtn){
+    state.view = 'scene';
+    state.scene = sceneBtn.dataset.scene;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  const filterBtn = e.target.closest('[data-filter]');
+  if(filterBtn){
+    state.filters[filterBtn.dataset.filter] = filterBtn.dataset.value;
+    render();
+    return;
+  }
+
+  const speakBtn = e.target.closest('[data-speak]');
+  if(speakBtn){
+    const p = byId(speakBtn.dataset.speak);
+    if(p){
+      const form = displayForm(p);
+      speak(form.ar);
+    }
+    return;
+  }
+
+  const favBtn = e.target.closest('[data-fav]');
+  if(favBtn){
+    toggleFav(favBtn.dataset.fav);
+    return;
+  }
+
+  if(e.target.closest('[data-quiz-start]')){
+    startQuiz();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  const optBtn = e.target.closest('[data-opt]');
+  if(optBtn && state.quiz && state.quiz.picked === null){
+    const q = state.quiz;
+    const cur = q.questions[q.idx];
+    q.picked = optBtn.dataset.opt;
+    if(q.picked === cur.answer) q.score++;
+    render();
+    return;
+  }
+
+  if(e.target.closest('[data-quiz-next]')){
+    const q = state.quiz;
+    q.idx++;
+    q.picked = null;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+});
+
+render();
+</script>
+</body>
+</html>
